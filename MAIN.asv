@@ -83,13 +83,12 @@ xlabel('Time (s)', 'FontSize', 15);
 ylabel('Control Input (V)', 'FontSize', 15);
 
 figure
-plot(tout, Xout(:,1));
+plot(t_control, u_control(:,2));
 hold on
-plot(tout, Xout(:,2));
-title('Joint angles of 10 hops for 2b', 'FontSize', 15);
+plot(t_control, u_control(:,2));
+title('Control input to Knee joint', 'FontSize', 15);
 xlabel('Time (s)', 'FontSize', 15);
-ylabel('Joint angle', 'FontSize', 15);
-legend('$\theta_1$','$\theta_2$','Interpreter','Latex');
+ylabel('Control Input (V)', 'FontSize', 15);
 
 %% Visualing the motion
 animateRobot(tout,Xout,p)

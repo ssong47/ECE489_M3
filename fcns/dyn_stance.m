@@ -1,5 +1,9 @@
 function dXdt = dyn_stance(t,X,p)
 global GRFz 
+global u_control
+global counter 
+global t_control
+
 params = p.params;
 tTD = p.tTD;            % touchdown time
 ptTD = p.ptTD;          % touchdown toe position
@@ -22,11 +26,19 @@ dJhc = fcn_dJhc(q,dq,ptTD,params);
 % Feedforward force
 s = (t - tTD) / Tst;        % stance phase parametrization s = [0, 1]
 % Force profile using Bezier polynomials
-F = polyval_bz([0 0 60 0 0], s);
+F = polyval_bz([0 0 80 0 0], s);
 
 %Joint-level control
 Jc_HIP = fcn_J_toe_HIP(q,params);
 u = -Jc_HIP'*[0; F];    %Torques of joints 3 (hip) and 4 (knee)
+u(1) = (u(1) + params(51)*params(52)/params(53)*params(49)*params(49)*dq(3))/Be(3,1);
+u(2) = (u(2) + params(51)*params(52)/params(53)*params(50)*params(50)*dq(4))/Be(4,2);
+
+%For plotting control input
+counter = counter+1;
+u_control(counter,1) = u(1);
+u_control(counter,2) = u(2);
+t_control(counter) = t;
 
 % Solve the linear system:
 % De * ddq + Ce * dq + Ge = J' * GRF + Be * u (4 eqns)

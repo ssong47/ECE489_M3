@@ -10,8 +10,13 @@ syms HB LB DB LH DK LK real
 syms M1 M2 M3 M4 real
 syms rx1 ry1 rz1 rx2 ry2 rz2 rx3 ry3 rz3 rx4 ry4 rz4 real
 syms Jx1 Jy1 Jz1 Jx2 Jy2 Jz2 Jx3 Jy3 Jz3 Jx4 Jy4 Jz4 real
+syms Jxy1 Jyz1 Jxz1 Jxy2 Jyz2 Jxz2 Jxy3 Jyz3 Jxz3 Jxy4 Jyz4 Jxz4 real
+syms Irotor NH NK Kv KT Rw real
 syms g real
 syms px py pz real
+syms a b c d K_spring L0 offset real
+syms l1 l2 spLength spLength_der Tau real
+ 
 
 %% --- variable lists ---
 % Physical parameters of the robot
@@ -60,7 +65,42 @@ m_list_params = {
     
     'Jx4' 'p(33)';
     'Jy4' 'p(34)';
-    'Jz4' 'p(35)'};
+    'Jz4' 'p(35)';
+    
+    'Jxy1' 'p(36)'; %Inertia tensor term in local link frame
+    'Jxz1' 'p(37)';
+    'Jyz1' 'p(38)';
+    
+    'Jxy2' 'p(39)';
+    'Jxz2' 'p(40)';
+    'Jyz2' 'p(41)';
+    
+    'Jxy3' 'p(42)';
+    'Jxz3' 'p(43)';
+    'Jyz3' 'p(44)';
+    
+    'Jxy4' 'p(45)';
+    'Jxz4' 'p(46)';
+    'Jyz4' 'p(47)';
+    
+    'Irotor' 'p(48)';
+    'NH' 'p(49)';
+    'NK' 'p(50)';
+    
+    'Kv' 'p(51)';
+    'KT' 'p(52)';
+    'Rw' 'p(53)';
+    
+    %Spring Parameters
+    'K_spring' 'p(54)';
+    'L0'       'p(55)';
+    'a'        'p(56)';
+    'b'        'p(57)';
+    'c'        'p(58)';
+    'd'        'p(59)';
+    'offset'   'p(60)';
+
+    };
 
 % joint positions
 m_list_q = {
@@ -191,10 +231,11 @@ w3 = Jw3 * dq;
 w4 = Jw4 * dq;
 
 %% --- Energy and Lagrangian ---
-KE_1 = 0.5 * v_1com' * M1 * v_1com + 0.5 * w1' * R01 * diag([Jx1 Jy1 Jz1])* transpose(R01) * w1;
-KE_2 = 0.5 * v_2com' * M2 * v_2com + 0.5 * w2' * R02 * diag([Jx2 Jy2 Jz2])* transpose(R02) * w2;
-KE_3 = 0.5 * v_3com' * M3 * v_3com + 0.5 * w3' * R03 * diag([Jx3 Jy3 Jz3])* transpose(R03) * w3;
-KE_4 = 0.5 * v_4com' * M4 * v_4com + 0.5 * w4' * R0toe * diag([Jx4 Jy4 Jz4])* transpose(R0toe) * w4;
+%Adding rotor inertia terms
+KE_1 = 0.5 * v_1com' * M1 * v_1com + 0.5 * w1' * R01 * [Jx1 Jxy1 Jxz1; Jxy1 Jy1 Jyz1; Jxz1 Jyz1 Jz1]* transpose(R01) * w1;
+KE_2 = 0.5 * v_2com' * M2 * v_2com + 0.5 * w2' * R02 * [Jx2 Jxy2 Jxz2; Jxy2 Jy2 Jyz2; Jxz2 Jyz2 Jz2]* transpose(R02) * w2;
+KE_3 = 0.5 * v_3com' * M3 * v_3com + 0.5 * w3' * R03 * [Jx3 Jxy3 Jxz3; Jxy3 Jy3 Jyz3; Jxz3 Jyz3 Jz3]* transpose(R03) * w3;
+KE_4 = 0.5 * v_4com' * M4 * v_4com + 0.5 * w4' * R0toe * [Jx4 Jxy4 Jxz4; Jxy4 Jy4 Jyz4; Jxz4 Jyz4 Jz4]* transpose(R0toe) * w4;
 
 % Kinetic energy
 KE = simplify(KE_1 + KE_2 + KE_3 + KE_4);   
@@ -203,10 +244,15 @@ KE = simplify(KE_1 + KE_2 + KE_3 + KE_4);
 PE = M1*[0 0 g]*p_1com + M2*[0 0 g]*p_2com + M3*[0 0 g]*p_3com + M4*[0 0 g]*p_4com;
 
 %To calculate the actuation selection matrix:
-Upsilon = [q3 q4]; %where control torques go: hip and knee only, first two joints are passive
+Upsilon = [KT*NH/Rw*q3 KT*NK/Rw*q4]; %where control torques go: hip and knee only, first two joints are passive
 
 %% --- Euler-Lagrange Equation ---
 [De, Ce, Ge, Be] = std_dynamics(KE,PE,q,dq, Upsilon);
+
+%Adding rotor inertia terms
+De = De + diag([0,0,Irotor*NH^2, Irotor*NK^2]);
+%Adding damping due to actuator dynamics
+Ce = Ce + diag([0,0,Kv*KT/Rw*NH^2, Kv*KT/Rw*NK^2]);
 
 write_fcn_m('fcn_De.m',{'q', 'p'},[m_list_q;m_list_params],{De,'De'});
 write_fcn_m('fcn_Ce.m',{'q', 'dq', 'p'},[m_list_q;m_list_dq;m_list_params],{Ce,'Ce'});
