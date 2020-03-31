@@ -1,3 +1,4 @@
+% Flag for animation
 animate = 0;
 
 global GRFz t_prev i_prev
@@ -11,13 +12,13 @@ i_prev = 0;
 
 % --- parameters ---
 p = get_params;     % Getting physical parameters of the robot
-Nstep = 10;          % number of desired hops
-step_size = 10;
+Nstep = 5;          % number of desired hops
+step_size = 1e-3;
 % Initial condition
 q0 = [0; 0; pi/3; -pi/2]; %Joint angles
 dq0 = [0; 0; 0; 0];       %Joint velocities
 ic = [q0; dq0];
-flag = '1c';
+flag = '1a'; % Change this flag to either "1a" "1b" "1c" 
 
 %Ploting the robot in the initial configuration:
 %plotRobot(ic,p);
@@ -122,36 +123,7 @@ elseif strcmp(flag,'1c') == 1
     hline(pi/2-0.1);
     xlabel('Time (sec)');
     ylabel('Angle (rad)'); 
-    
-elseif strcmp(flag, '2a') == 1
-    joint_angle = [];
-    joint_angle(1,:) = Xout(:,1);
-    joint_angle(2,:) = Xout(:,2);
-    joint_angle(3,:) = Xout(:,3);
-    joint_angle(4,:) = Xout(:,4);
-
-    figure(5)
-    lw = 1.0;
-    plot(tout, joint_angle(1,:), 'Linewidth',lw);
-    hold on;
-    plot(tout, joint_angle(2,:), 'Linewidth',lw);
-    plot(tout, joint_angle(3,:), 'Linewidth',lw);
-    plot(tout, joint_angle(4,:), 'Linewidth',lw);
-    xlabel('Time (sec)');
-    ylabel('$\theta$ (rad)','Interpreter','Latex');
-    legend('\theta_1','\theta_2','\theta_3','\theta_4','Interpreter','Latex');
-
-
-    
-elseif strcmp(flag, '2b') == 1
-    
-elseif strcmp(flag, '2c') == 1
-    
-elseif strcmp(flag, '2d') == 1
-    
-elseif strcmp(flag, '2e') == 1
-    
-elseif strcmp(flag, '2f') == 1
+  
     
 end
 

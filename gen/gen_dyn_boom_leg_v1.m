@@ -208,20 +208,6 @@ if (strcmp(flag,'1a') == 1)|| (strcmp(flag,'1b') == 1) || (strcmp(flag,'1c') == 
 
     %% --- Euler-Lagrange Equation ---
     [De, Ce, Ge, Be] = std_dynamics(KE,PE,q,dq, Upsilon);
-
-elseif strcmp(flag, '2a') == 1
-
-    
-elseif strcmp(flag, '2b') == 1
-    
-elseif strcmp(flag, '2c') == 1
-    
-elseif strcmp(flag, '2d') == 1
-    
-elseif strcmp(flag, '2e') == 1
-    
-elseif strcmp(flag, '2f') == 1
-    
 end
 
 

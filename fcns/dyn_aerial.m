@@ -19,19 +19,6 @@ elseif strcmp(flag,'1b') == 1
 elseif strcmp(flag,'1c') == 1
     qd = [70 * pi/180; -100 * pi/180];     % desired joint position
 
-elseif strcmp(flag, '2a') == 1
-
-    
-elseif strcmp(flag, '2b') == 1
-    
-elseif strcmp(flag, '2c') == 1
-    
-elseif strcmp(flag, '2d') == 1
-    
-elseif strcmp(flag, '2e') == 1
-    
-elseif strcmp(flag, '2f') == 1
-    
 end
 q1 = q(3);
 q2 = q(4);

@@ -68,19 +68,6 @@ elseif strcmp(flag,'1c') == 1
     t_prev = t;
     i_prev = dt * (q_1_desired - q1) + i_prev;
     
-elseif strcmp(flag, '2a') == 1
-
-    
-elseif strcmp(flag, '2b') == 1
-    
-elseif strcmp(flag, '2c') == 1
-    
-elseif strcmp(flag, '2d') == 1
-    
-elseif strcmp(flag, '2e') == 1
-    
-elseif strcmp(flag, '2f') == 1
-    
 end
 
 %% Part1b
