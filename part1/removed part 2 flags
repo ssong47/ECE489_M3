@@ -1,0 +1,137 @@
+[1mdiff --git a/MAIN.m b/MAIN.m[m
+[1mindex d635dc8..7c70c04 100644[m
+[1m--- a/MAIN.m[m
+[1m+++ b/MAIN.m[m
+[36m@@ -1,3 +1,4 @@[m
+[32m+[m[32m% Flag for animation[m
+ animate = 0;[m
+ [m
+ global GRFz t_prev i_prev[m
+[36m@@ -11,13 +12,13 @@[m [mi_prev = 0;[m
+ [m
+ % --- parameters ---[m
+ p = get_params;     % Getting physical parameters of the robot[m
+[31m-Nstep = 10;          % number of desired hops[m
+[31m-step_size = 10;[m
+[32m+[m[32mNstep = 5;          % number of desired hops[m
+[32m+[m[32mstep_size = 1e-3;[m
+ % Initial condition[m
+ q0 = [0; 0; pi/3; -pi/2]; %Joint angles[m
+ dq0 = [0; 0; 0; 0];       %Joint velocities[m
+ ic = [q0; dq0];[m
+[31m-flag = '1c';[m
+[32m+[m[32mflag = '1a'; % Change this flag to either "1a" "1b" "1c"[m[41m [m
+ [m
+ %Ploting the robot in the initial configuration:[m
+ %plotRobot(ic,p);[m
+[36m@@ -122,36 +123,7 @@[m [melseif strcmp(flag,'1c') == 1[m
+     hline(pi/2-0.1);[m
+     xlabel('Time (sec)');[m
+     ylabel('Angle (rad)'); [m
+[31m-    [m
+[31m-elseif strcmp(flag, '2a') == 1[m
+[31m-    joint_angle = [];[m
+[31m-    joint_angle(1,:) = Xout(:,1);[m
+[31m-    joint_angle(2,:) = Xout(:,2);[m
+[31m-    joint_angle(3,:) = Xout(:,3);[m
+[31m-    joint_angle(4,:) = Xout(:,4);[m
+[31m-[m
+[31m-    figure(5)[m
+[31m-    lw = 1.0;[m
+[31m-    plot(tout, joint_angle(1,:), 'Linewidth',lw);[m
+[31m-    hold on;[m
+[31m-    plot(tout, joint_angle(2,:), 'Linewidth',lw);[m
+[31m-    plot(tout, joint_angle(3,:), 'Linewidth',lw);[m
+[31m-    plot(tout, joint_angle(4,:), 'Linewidth',lw);[m
+[31m-    xlabel('Time (sec)');[m
+[31m-    ylabel('$\theta$ (rad)','Interpreter','Latex');[m
+[31m-    legend('\theta_1','\theta_2','\theta_3','\theta_4','Interpreter','Latex');[m
+[31m-[m
+[31m-[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2b') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2c') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2d') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2e') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2f') == 1[m
+[32m+[m[41m  [m
+     [m
+ end[m
+ [m
+[1mdiff --git a/fcns/dyn_aerial.m b/fcns/dyn_aerial.m[m
+[1mindex fe57381..3589bb9 100644[m
+[1m--- a/fcns/dyn_aerial.m[m
+[1m+++ b/fcns/dyn_aerial.m[m
+[36m@@ -19,19 +19,6 @@[m [melseif strcmp(flag,'1b') == 1[m
+ elseif strcmp(flag,'1c') == 1[m
+     qd = [70 * pi/180; -100 * pi/180];     % desired joint position[m
+ [m
+[31m-elseif strcmp(flag, '2a') == 1[m
+[31m-[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2b') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2c') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2d') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2e') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2f') == 1[m
+[31m-    [m
+ end[m
+ q1 = q(3);[m
+ q2 = q(4);[m
+[1mdiff --git a/fcns/dyn_stance.m b/fcns/dyn_stance.m[m
+[1mindex 7e38d2d..12c0af2 100644[m
+[1m--- a/fcns/dyn_stance.m[m
+[1m+++ b/fcns/dyn_stance.m[m
+[36m@@ -68,19 +68,6 @@[m [melseif strcmp(flag,'1c') == 1[m
+     t_prev = t;[m
+     i_prev = dt * (q_1_desired - q1) + i_prev;[m
+     [m
+[31m-elseif strcmp(flag, '2a') == 1[m
+[31m-[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2b') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2c') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2d') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2e') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2f') == 1[m
+[31m-    [m
+ end[m
+ [m
+ %% Part1b[m
+[1mdiff --git a/gen/gen_dyn_boom_leg_v1.m b/gen/gen_dyn_boom_leg_v1.m[m
+[1mindex d37ffec..b3c857b 100644[m
+[1m--- a/gen/gen_dyn_boom_leg_v1.m[m
+[1m+++ b/gen/gen_dyn_boom_leg_v1.m[m
+[36m@@ -208,20 +208,6 @@[m [mif (strcmp(flag,'1a') == 1)|| (strcmp(flag,'1b') == 1) || (strcmp(flag,'1c') ==[m
+ [m
+     %% --- Euler-Lagrange Equation ---[m
+     [De, Ce, Ge, Be] = std_dynamics(KE,PE,q,dq, Upsilon);[m
+[31m-[m
+[31m-elseif strcmp(flag, '2a') == 1[m
+[31m-[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2b') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2c') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2d') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2e') == 1[m
+[31m-    [m
+[31m-elseif strcmp(flag, '2f') == 1[m
+[31m-    [m
+ end[m
+ [m
+ [m

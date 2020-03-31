@@ -82,6 +82,7 @@ end
 % [Jhc  0   ]   [GRF]   [-dJhc*dq         ]
 % unknowns: ddq(4x1), GRF(3x1) 
 % control: u(2x1)
+
 Amat = [De -Jhc'; 
         Jhc zeros(2,2)];
 bvec = [Be*u - Ce*dq - Ge; 
