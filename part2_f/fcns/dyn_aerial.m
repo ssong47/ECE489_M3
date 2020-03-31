@@ -35,13 +35,13 @@ u(2) = u(2)/Be(4,2);
 % Trying Saturation
 saturate = 20;
 
-if abs(u(1)) > saturate
-    u(1) = sign(u(1))*saturate;
-end
-
-if abs(u(2)) > saturate
-    u(2) = sign(u(2))*saturate;
-end
+% if abs(u(1)) > saturate
+%     u(1) = sign(u(1))*saturate;
+% end
+% 
+% if abs(u(2)) > saturate
+%     u(2) = sign(u(2))*saturate;
+% end
 
 %For plotting control input
 counter = counter+1;

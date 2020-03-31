@@ -95,6 +95,7 @@ plot(t_control, u_control(:,2));
 title('Contol input to Knee joint', 'FontSize', 15);
 xlabel('Time (s)', 'FontSize', 15);
 ylabel('Control Input (V)', 'FontSize', 15);
+ylim([-30 30])
 
 
 %% For Plotting Spring Torque

@@ -39,13 +39,13 @@ IactK = params(48)*params(50)^2;
 
 % Accounting for coupling due to inertia matrix
 M_task = pinv(Jc_HIP)'*diag([IactH, IactK])*pinv(Jc_HIP);
-u = -Jc_HIP'*M_task*[k_y*F; F];    %Torques of joints 3 (hip) and 4 (knee)
+u = -Jc_HIP'*[k_y*F; F];    %Torques of joints 3 (hip) and 4 (knee)
     
 BH = params(51)*params(52)/params(53)*params(49)^2;
 BK = params(51)*params(52)/params(53)*params(50)^2;
 
 % Gravity Compensation + Damping Compensation + Spring Compensations
-u = u + Ge(3:4) + diag([BH,BK])*dq(3:4) - Ts(3:4);
+u = u + diag([BH,BK])*dq(3:4) - Ts(3:4);
 
 u(1) = u(1)/Be(3,1);
 u(2) = u(2)/Be(4,2);
@@ -54,13 +54,13 @@ u(2) = u(2)/Be(4,2);
 % if you dont want to try it with saturation)
 saturate = 20;
 
-if abs(u(1)) > saturate
-    u(1) = sign(u(1))*saturate;
-end
-
-if abs(u(2)) > saturate
-    u(2) = sign(u(2))*saturate;
-end
+% if abs(u(1)) > saturate
+%     u(1) = sign(u(1))*saturate;
+% end
+% 
+% if abs(u(2)) > saturate
+%     u(2) = sign(u(2))*saturate;
+% end
 
 
 %For plotting control input
