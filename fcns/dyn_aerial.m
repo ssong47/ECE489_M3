@@ -1,4 +1,4 @@
-function dXdt = dyn_aerial(t,X,p)
+function dXdt = dyn_aerial(t,X,p, flag)
 
 params = p.params;
 q = X(1:4); %joint positions
@@ -10,7 +10,29 @@ Ge = fcn_Ge(q,params); %gravity vector
 Be = fcn_Be(q,params); %actuation selection matrix
 
 % swing controller
-qd = [pi/3; -pi/2];     % desired joint position
+if strcmp(flag,'1a') == 1
+    qd = [pi/3; -pi/2];     % desired joint position
+
+elseif strcmp(flag,'1b') == 1
+    qd = [70 * pi/180; -100 * pi/180];     % desired joint position
+
+elseif strcmp(flag,'1c') == 1
+    qd = [70 * pi/180; -100 * pi/180];     % desired joint position
+
+elseif strcmp(flag, '2a') == 1
+
+    
+elseif strcmp(flag, '2b') == 1
+    
+elseif strcmp(flag, '2c') == 1
+    
+elseif strcmp(flag, '2d') == 1
+    
+elseif strcmp(flag, '2e') == 1
+    
+elseif strcmp(flag, '2f') == 1
+    
+end
 q1 = q(3);
 q2 = q(4);
 dq1 = dq(3);

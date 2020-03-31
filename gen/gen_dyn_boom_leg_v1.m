@@ -2,7 +2,7 @@
 % Author: Yanran Ding and João Ramos
 % Last modified: 2020/03/05
 clear all
-
+flag = '1a';
 %% --- define symbols ---
 syms q1 q2 q3 q4 real
 syms dq1 dq2 dq3 dq4 real
@@ -191,22 +191,40 @@ w3 = Jw3 * dq;
 w4 = Jw4 * dq;
 
 %% --- Energy and Lagrangian ---
-KE_1 = 0.5 * v_1com' * M1 * v_1com + 0.5 * w1' * R01 * diag([Jx1 Jy1 Jz1])* transpose(R01) * w1;
-KE_2 = 0.5 * v_2com' * M2 * v_2com + 0.5 * w2' * R02 * diag([Jx2 Jy2 Jz2])* transpose(R02) * w2;
-KE_3 = 0.5 * v_3com' * M3 * v_3com + 0.5 * w3' * R03 * diag([Jx3 Jy3 Jz3])* transpose(R03) * w3;
-KE_4 = 0.5 * v_4com' * M4 * v_4com + 0.5 * w4' * R0toe * diag([Jx4 Jy4 Jz4])* transpose(R0toe) * w4;
+if (strcmp(flag,'1a') == 1)|| (strcmp(flag,'1b') == 1) || (strcmp(flag,'1c') == 1)
+    KE_1 = 0.5 * v_1com' * M1 * v_1com + 0.5 * w1' * R01 * diag([Jx1 Jy1 Jz1])* transpose(R01) * w1;
+    KE_2 = 0.5 * v_2com' * M2 * v_2com + 0.5 * w2' * R02 * diag([Jx2 Jy2 Jz2])* transpose(R02) * w2;
+    KE_3 = 0.5 * v_3com' * M3 * v_3com + 0.5 * w3' * R03 * diag([Jx3 Jy3 Jz3])* transpose(R03) * w3;
+    KE_4 = 0.5 * v_4com' * M4 * v_4com + 0.5 * w4' * R0toe * diag([Jx4 Jy4 Jz4])* transpose(R0toe) * w4;
 
-% Kinetic energy
-KE = simplify(KE_1 + KE_2 + KE_3 + KE_4);   
+    % Kinetic energy
+    KE = simplify(KE_1 + KE_2 + KE_3 + KE_4);   
 
-% Potential energy
-PE = M1*[0 0 g]*p_1com + M2*[0 0 g]*p_2com + M3*[0 0 g]*p_3com + M4*[0 0 g]*p_4com;
+    % Potential energy
+    PE = M1*[0 0 g]*p_1com + M2*[0 0 g]*p_2com + M3*[0 0 g]*p_3com + M4*[0 0 g]*p_4com;
 
-%To calculate the actuation selection matrix:
-Upsilon = [q3 q4]; %where control torques go: hip and knee only, first two joints are passive
+    %To calculate the actuation selection matrix:
+    Upsilon = [q3 q4]; %where control torques go: hip and knee only, first two joints are passive
 
-%% --- Euler-Lagrange Equation ---
-[De, Ce, Ge, Be] = std_dynamics(KE,PE,q,dq, Upsilon);
+    %% --- Euler-Lagrange Equation ---
+    [De, Ce, Ge, Be] = std_dynamics(KE,PE,q,dq, Upsilon);
+
+elseif strcmp(flag, '2a') == 1
+
+    
+elseif strcmp(flag, '2b') == 1
+    
+elseif strcmp(flag, '2c') == 1
+    
+elseif strcmp(flag, '2d') == 1
+    
+elseif strcmp(flag, '2e') == 1
+    
+elseif strcmp(flag, '2f') == 1
+    
+end
+
+
 
 write_fcn_m('fcn_De.m',{'q', 'p'},[m_list_q;m_list_params],{De,'De'});
 write_fcn_m('fcn_Ce.m',{'q', 'dq', 'p'},[m_list_q;m_list_dq;m_list_params],{Ce,'Ce'});
